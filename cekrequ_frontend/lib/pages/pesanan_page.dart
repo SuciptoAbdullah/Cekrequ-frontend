@@ -2,56 +2,61 @@ import 'package:flutter/material.dart';
 
 class PesananPage extends StatelessWidget {
   PesananPage({super.key});
+
   final List<Map<String, dynamic>> pesanan = [
     {
       "judul": "Foto Wedding Dekorasi",
       "status": "Sukses",
-      "gambar": "assets/image/Wedding11.jpg"
+      "gambar": "assets/image/Wedding11.jpg",
     },
     {
       "judul": "Foto Prewedding Outdoor Adat Jawa",
       "status": "Sukses",
-      "gambar": "assets/image/Prewedding11jpg"
+      "gambar": "assets/image/Prewedding11.jpg",
     },
     {
       "judul": "Foto Bayi Konsep Salon",
       "status": "Sukses",
-      "gambar": "assets/image/baby1.jpg"
+      "gambar": "assets/image/baby1.jpg",
     },
     {
       "judul": "Foto Maternity Adat Jawa",
       "status": "Sukses",
-      "gambar": "assets/image/Maternity1.jpg"
+      "gambar": "assets/image/Maternity1.jpg",
     },
   ];
 
   Color getStatusColor(String status) {
-    if (status == "Sukses") {
-      return Colors.green;
-    } else {
-      return Colors.orange;
-    }
+    return status == "Sukses" ? Colors.green : Colors.orange;
+  }
+
+  Color getStatusBg(String status) {
+    return status == "Sukses" ? Colors.green.shade100 : Colors.orange.shade100;
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Daftar Pesanan"),
+        title: const Text("Daftar Pesanan"),
         actions: [
-          Icon(Icons.shopping_cart_outlined),
-          SizedBox(width: 10),
-          Icon(Icons.notifications_none),
-          SizedBox(width: 10),
+          IconButton(
+            icon: const Icon(Icons.shopping_cart_outlined),
+            onPressed: () {},
+          ),
+          IconButton(
+            icon: const Icon(Icons.notifications_none),
+            onPressed: () {},
+          ),
         ],
       ),
       body: Column(
         children: [
-          // Filter
+          // FILTER
           Padding(
             padding: const EdgeInsets.all(12),
             child: Row(
-              children: [
+              children: const [
                 Text("Urutkan menurut: "),
                 SizedBox(width: 10),
                 Chip(label: Text("Terbaru")),
@@ -59,7 +64,7 @@ class PesananPage extends StatelessWidget {
             ),
           ),
 
-          // List Pesanan
+          // LIST PESANAN
           Expanded(
             child: ListView.builder(
               itemCount: pesanan.length,
@@ -67,15 +72,19 @@ class PesananPage extends StatelessWidget {
                 final item = pesanan[index];
 
                 return Card(
-                  margin: EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                  elevation: 3,
+                  margin: const EdgeInsets.symmetric(
+                    horizontal: 12,
+                    vertical: 6,
+                  ),
                   shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
+                    borderRadius: BorderRadius.circular(15),
                   ),
                   child: Padding(
                     padding: const EdgeInsets.all(10),
                     child: Row(
                       children: [
-                        // Gambar
+                        // GAMBAR (AMAN)
                         ClipRRect(
                           borderRadius: BorderRadius.circular(10),
                           child: Image.asset(
@@ -83,48 +92,62 @@ class PesananPage extends StatelessWidget {
                             width: 70,
                             height: 70,
                             fit: BoxFit.cover,
+
+                            // 🔥 INI YANG PENTING (ANTI ERROR MERAH)
+                            errorBuilder: (context, error, stackTrace) {
+                              return Container(
+                                width: 70,
+                                height: 70,
+                                color: Colors.grey[300],
+                                child: const Icon(
+                                  Icons.image_not_supported,
+                                  color: Colors.grey,
+                                ),
+                              );
+                            },
                           ),
                         ),
 
-                        SizedBox(width: 10),
+                        const SizedBox(width: 12),
 
-                        // Info
+                        // INFO
                         Expanded(
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
                                 item["judul"],
-                                style: TextStyle(
+                                style: const TextStyle(
                                   fontWeight: FontWeight.bold,
                                 ),
                               ),
-                              SizedBox(height: 5),
+                              const SizedBox(height: 6),
+
                               Row(
                                 children: [
-                                  Text("Status: "),
+                                  const Text("Status: "),
                                   Container(
-                                    padding: EdgeInsets.symmetric(
-                                        horizontal: 10, vertical: 4),
+                                    padding: const EdgeInsets.symmetric(
+                                      horizontal: 10,
+                                      vertical: 4,
+                                    ),
                                     decoration: BoxDecoration(
-                                      color: getStatusColor(item["status"]),
-                                          
+                                      color: getStatusBg(item["status"]),
                                       borderRadius: BorderRadius.circular(20),
                                     ),
                                     child: Text(
                                       item["status"],
                                       style: TextStyle(
-                                        color:
-                                            getStatusColor(item["status"]),
+                                        color: getStatusColor(item["status"]),
                                         fontWeight: FontWeight.bold,
                                       ),
                                     ),
-                                  )
+                                  ),
                                 ],
-                              )
+                              ),
                             ],
                           ),
-                        )
+                        ),
                       ],
                     ),
                   ),
@@ -133,26 +156,24 @@ class PesananPage extends StatelessWidget {
             ),
           ),
 
-          // Tombol Buat Pesanan
+          // BUTTON
           Padding(
             padding: const EdgeInsets.all(12),
             child: SizedBox(
               width: double.infinity,
               child: ElevatedButton(
-                onPressed: () {
-                  // aksi buat pesanan
-                },
+                onPressed: () {},
                 style: ElevatedButton.styleFrom(
-                  padding: EdgeInsets.symmetric(vertical: 15),
+                  padding: const EdgeInsets.symmetric(vertical: 15),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(20),
                   ),
                   backgroundColor: Colors.blue,
                 ),
-                child: Text("+ Buat Pesanan"),
+                child: const Text("+ Buat Pesanan"),
               ),
             ),
-          )
+          ),
         ],
       ),
     );

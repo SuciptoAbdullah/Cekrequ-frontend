@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../models/paket.dart';
 import 'galeri_page.dart';
 import 'pesanan_page.dart';
+import 'profil_page.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -43,7 +44,7 @@ class _HomePageState extends State<HomePage> {
         homeContent(),
         PesananPage(),
         const GalleryPage(),
-        const Center(child: Text("Profil")),
+        const ProfilPage(),
       ];
 
   @override
@@ -70,6 +71,7 @@ class _HomePageState extends State<HomePage> {
           BottomNavigationBarItem(icon: Icon(Icons.receipt), label: "Pesanan"),
           BottomNavigationBarItem(icon: Icon(Icons.image), label: "Galeri"),
           BottomNavigationBarItem(icon: Icon(Icons.person), label: "Profil"),
+         
         ],
       ),
     );
