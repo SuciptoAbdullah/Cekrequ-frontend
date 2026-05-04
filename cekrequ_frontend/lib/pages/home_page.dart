@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../models/paket.dart';
+import '../models/package.dart';
 import 'galeri_page.dart';
 import 'pesanan_page.dart';
 import 'profil_page.dart';

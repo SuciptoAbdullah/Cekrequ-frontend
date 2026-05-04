@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'views/splash_screen_view.dart';
 
-void main() {
+void main() async {
   runApp(const MyApp());
 }
 class MyApp extends StatefulWidget {
@@ -22,3 +22,4 @@ class _MyAppState extends State<MyApp> {
     );
   }
 }
+
