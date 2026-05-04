@@ -1,3 +1,4 @@
+import 'package:cekrequ_frontend/pages/rincian_pesanan.dart';
 import 'package:flutter/material.dart';
 
 class PesananPage extends StatelessWidget {
@@ -12,7 +13,7 @@ class PesananPage extends StatelessWidget {
     {
       "judul": "Foto Prewedding Outdoor Adat Jawa",
       "status": "Sukses",
-      "gambar": "assets/image/Prewed11.jpg",
+      "gambar": "assets/image/Prewed10.jpg",
     },
     {
       "judul": "Foto Bayi Konsep Salon",
@@ -71,7 +72,13 @@ class PesananPage extends StatelessWidget {
               itemBuilder: (context, index) {
                 final item = pesanan[index];
 
-                return Card(
+                return InkWell(
+                  onTap: (){
+                    Navigator.push(
+                      context, MaterialPageRoute(builder: (context) => DetailPesananPage(data: item))
+                    );
+                  },
+                  child: Card(
                   elevation: 3,
                   margin: const EdgeInsets.symmetric(
                     horizontal: 12,
@@ -93,7 +100,7 @@ class PesananPage extends StatelessWidget {
                             height: 70,
                             fit: BoxFit.cover,
 
-                            // 🔥 INI YANG PENTING (ANTI ERROR MERAH)
+                            // INI YANG PENTING (ANTI ERROR MERAH)
                             errorBuilder: (context, error, stackTrace) {
                               return Container(
                                 width: 70,
@@ -151,6 +158,7 @@ class PesananPage extends StatelessWidget {
                       ],
                     ),
                   ),
+                )
                 );
               },
             ),

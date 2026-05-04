@@ -3,39 +3,40 @@ import 'package:flutter/material.dart';
 class GalleryPage extends StatelessWidget {
   const GalleryPage({super.key});
 
-  Widget buildSection(String title, List<String> images) {
-    return Container(
-      margin: const EdgeInsets.symmetric(vertical: 10),
-      padding: const EdgeInsets.all(12),
-      decoration: BoxDecoration(
-        color: Colors.grey[200],
-        borderRadius: BorderRadius.circular(15),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(title, style: const TextStyle(fontWeight: FontWeight.bold)),
-          const SizedBox(height: 10),
-
-          Row(
-            children: images.map((img) {
-              return Expanded(
-                child: Container(
-                  margin: const EdgeInsets.symmetric(horizontal: 5),
-                  height: 90,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(12),
-                    image: DecorationImage(
-                      image: AssetImage(img),
-                      fit: BoxFit.cover,
-                    ),
-                  ),
-                ),
-              );
-            }).toList(),
+  Widget buildItem(
+    BuildContext context, String title, String desc, String img) {
+    return InkWell(
+      onTap: () {},
+        child: Container(
+          margin: const EdgeInsets.symmetric(vertical: 8),
+          padding: const EdgeInsets.all(10),
+          decoration: BoxDecoration(
+            color: Colors.grey[200],
+            borderRadius: BorderRadius.circular(15),
           ),
-        ],
-      ),
+          child: Row(
+            children: [
+              ClipRRect(
+                borderRadius: BorderRadius.circular(12),
+                child: Image.asset(img, width: 80, height: 80, fit: BoxFit.cover),
+              ),
+              const SizedBox(width: 12),
+
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(title, style: const TextStyle(
+                      fontWeight: FontWeight.bold, fontSize: 16,
+                    ),),
+                    const SizedBox(height: 5),
+                    Text(desc, style: const TextStyle(color: Colors.grey),),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
     );
   }
 
@@ -57,34 +58,21 @@ class GalleryPage extends StatelessWidget {
 
       body: Padding(
         padding: const EdgeInsets.all(12),
-        child: ListView(
+        child: Column(
           children: [
-            buildSection("Prewedding", [
-              "assets/image/Prewed11.jpg",
-            ]),
-            buildSection("Wedding", [
-              "assets/image/Wedding4.jpg",
-            ]),
-            buildSection("Maternity", [
-              "assets/image/Maternity1.jpg",
-            ]),
-            buildSection("Baby", [
-              "assets/image/baby1.jpg",
-            ]),
+            const Text("Jelajahi", style: TextStyle(fontSize: 20, fontWeight:FontWeight.bold),),
+            const SizedBox(height: 5),
+            const Text("Klik untuk info lebih detail"),
+            const SizedBox(height: 15),
 
-            const SizedBox(height: 20),
-
-            SizedBox(
-              height: 50,
-              child: ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.blue,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(25),
-                  ),
-                ),
-                onPressed: () {},
-                child: const Text("+ Buat Pesanan"),
+            Expanded(
+              child: ListView(
+                children: [
+                  buildItem(context, "Prewedding", "butuh foto formal? pesan yang ini saja :D", "assets/image/Prewed10.jpg"),
+                  buildItem(context, "Wedding", "Yakin mau nikah tapi tidak diabadikan?", "assets/image/Wedding6.jpg"),
+                  buildItem(context, "Baby", "Abadikan momen dengan paket foto ini", "assets/image/baby1.jpg"),
+                  buildItem(context, "Maternity", "Abadikan momen dengan paket foto ini", "assets/image/Maternity1.jpg"),
+                ],
               ),
             ),
           ],

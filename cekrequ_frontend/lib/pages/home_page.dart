@@ -3,6 +3,7 @@ import '../models/paket.dart';
 import 'galeri_page.dart';
 import 'pesanan_page.dart';
 import 'profil_page.dart';
+import '../services/api_services.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -11,17 +12,18 @@ class HomePage extends StatefulWidget {
   State<HomePage> createState() => _HomePageState();
 }
 
+String data = "";
+
 class _HomePageState extends State<HomePage> {
   int selectedIndex = 0;
 
   final List<Paket> daftarPaket = [
     Paket(
-      nama: "Foto Wedding Dekorasi",
+      nama: data,
       tempat: "Indoor (studio)",
       warna: "Hitam",
       harga: 250000,
       gambar: "assets/image/Wedding4.jpg",
-
     ),
     Paket(
       nama: "Foto Prewedding Outdoor",
@@ -41,11 +43,11 @@ class _HomePageState extends State<HomePage> {
 
   // ===== LIST PAGE =====
   List<Widget> get pages => [
-        homeContent(),
-        PesananPage(),
-        const GalleryPage(),
-        const ProfilPage(),
-      ];
+    homeContent(),
+    PesananPage(),
+    const GalleryPage(),
+    const ProfilPage(),
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -71,7 +73,6 @@ class _HomePageState extends State<HomePage> {
           BottomNavigationBarItem(icon: Icon(Icons.receipt), label: "Pesanan"),
           BottomNavigationBarItem(icon: Icon(Icons.image), label: "Galeri"),
           BottomNavigationBarItem(icon: Icon(Icons.person), label: "Profil"),
-         
         ],
       ),
     );
@@ -114,8 +115,7 @@ class _HomePageState extends State<HomePage> {
                   ),
                   const CircleAvatar(
                     radius: 30,
-                    backgroundImage:
-                        NetworkImage("https://i.pravatar.cc/150"),
+                    backgroundImage: NetworkImage("https://i.pravatar.cc/150"),
                   ),
                 ],
               ),
@@ -172,64 +172,61 @@ class _HomePageState extends State<HomePage> {
 
   // ===== CARD =====
   Widget paketCard(Paket paket) {
-  return Container(
-    margin: const EdgeInsets.only(bottom: 12),
-    padding: const EdgeInsets.all(10),
-    decoration: BoxDecoration(
-      borderRadius: BorderRadius.circular(15),
-      color: Colors.grey[200],
-    ),
-    child: Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        ClipRRect(
-          borderRadius: BorderRadius.circular(10),
-          child: SizedBox(
-            width: 90,
-            height: 90,
-            child: Image.asset(
-              paket.gambar,
-              fit: BoxFit.cover,
-              errorBuilder: (context, error, stackTrace) {
-                return Container(
-                  color: Colors.grey,
-                  child: const Icon(Icons.broken_image),
-                );
-              },
+    return Container(
+      margin: const EdgeInsets.only(bottom: 12),
+      padding: const EdgeInsets.all(10),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(15),
+        color: Colors.grey[200],
+      ),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          ClipRRect(
+            borderRadius: BorderRadius.circular(10),
+            child: SizedBox(
+              width: 90,
+              height: 90,
+              child: Image.asset(
+                paket.gambar,
+                fit: BoxFit.cover,
+                errorBuilder: (context, error, stackTrace) {
+                  return Container(
+                    color: Colors.grey,
+                    child: const Icon(Icons.broken_image),
+                  );
+                },
+              ),
             ),
           ),
-        ),
-        const SizedBox(width: 10),
-        Expanded(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+          const SizedBox(width: 10),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  paket.nama,
+                  style: const TextStyle(fontWeight: FontWeight.bold),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
+                const SizedBox(height: 4),
+                Text("Tempat: ${paket.tempat}"),
+                Text("Warna: ${paket.warna}"),
+                Text("Harga: Rp ${paket.harga}"),
+              ],
+            ),
+          ),
+          const SizedBox(width: 10),
+          Column(
             children: [
-              Text(
-                paket.nama,
-                style: const TextStyle(fontWeight: FontWeight.bold),
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-              ),
-              const SizedBox(height: 4),
-              Text("Tempat: ${paket.tempat}"),
-              Text("Warna: ${paket.warna}"),
-              Text("Harga: Rp ${paket.harga}"),
+              const Icon(Icons.shopping_cart),
+              const SizedBox(height: 5),
+              ElevatedButton(onPressed: () {}, child: const Text("Beli")),
             ],
           ),
-        ),
-        const SizedBox(width: 10),
-        Column(
-          children: [
-            const Icon(Icons.shopping_cart),
-            const SizedBox(height: 5),
-            ElevatedButton(
-              onPressed: () {},
-              child: const Text("Beli"),
-            ),
-          ],
-        ),
-      ],
-    ),
-  );
-}
+        ],
+      ),
+    );
+  }
 }
