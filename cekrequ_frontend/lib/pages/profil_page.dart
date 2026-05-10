@@ -5,132 +5,75 @@ class ProfilPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      color: const Color(0xFFE5E5E5),
-      child: SafeArea(
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
-              // ===== HEADER =====
-              Padding(
-                padding: const EdgeInsets.all(16),
-                child: Container(
-                  padding: const EdgeInsets.all(16),
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(16),
-                    boxShadow: const [
-                      BoxShadow(
-                        blurRadius: 5,
-                        color: Colors.black12,
-                        offset: Offset(0, 3),
-                      ),
-                    ],
-                  ),
-                  child: Row(
-                    children: [
-                      // TEXT
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: const [
-                            Text(
-                              "Halo Aris !",
-                              style: TextStyle(
-                                fontSize: 20,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            SizedBox(height: 8),
-                            Text(
-                              "Selamat datang di aplikasi cekrequ.\nAbadikan setiap momen spesialmu bersama kami.",
-                              style: TextStyle(
-                                fontSize: 12,
-                                color: Colors.grey,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
+    return Scaffold(
+      backgroundColor: const Color(0xFFE5E5E5),
 
-                      // FOTO
-                      const CircleAvatar(
-                        radius: 30,
-                        backgroundImage: AssetImage('assets/profile.jpg'),
-                      ),
-                    ],
-                  ),
-                ),
+      body: SafeArea(
+        child: Center(
+          // biar card di tengah
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20),
+            child: Container(
+              padding: const EdgeInsets.all(20),
+              decoration: BoxDecoration(
+                color: Colors.grey.shade200,
+                borderRadius: BorderRadius.circular(20),
               ),
 
-              // ===== CARD PROFILE =====
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16),
-                child: Container(
-                  padding: const EdgeInsets.all(16),
-                  decoration: BoxDecoration(
-                    color: Colors.grey.shade200,
-                    borderRadius: BorderRadius.circular(16),
+              child: Column(
+                mainAxisSize: MainAxisSize.max,
+                children: [
+                  const Text(
+                    "Profile",
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                   ),
-                  child: Column(
-                    children: [
-                      const Text(
-                        "Profile",
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
+
+                  const SizedBox(height: 200),
+
+                  // ===== BUTTON MASUK =====
+                  SizedBox(
+                    width: double.infinity,
+                    child: ElevatedButton(
+                      onPressed: () {},
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.blue,
+                        elevation: 3,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(25),
                         ),
+                        padding: const EdgeInsets.symmetric(vertical: 14),
                       ),
-
-                      const SizedBox(height: 16),
-
-                      // BUTTON LOGIN
-                      SizedBox(
-                        width: double.infinity,
-                        child: ElevatedButton(
-                          onPressed: () {
-                            // TODO: aksi login
-                          },
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.blue,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(20),
-                            ),
-                            padding: const EdgeInsets.symmetric(vertical: 14),
-                          ),
-                          child: const Text("Sign/Login"),
-                        ),
+                      child: const Text(
+                        "Masuk",
+                        style: TextStyle(fontSize: 14),
                       ),
-
-                      const SizedBox(height: 16),
-
-                      // USER CARD
-                      Container(
-                        padding: const EdgeInsets.all(12),
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(12),
-                          boxShadow: const [
-                            BoxShadow(blurRadius: 3, color: Colors.black12),
-                          ],
-                        ),
-                        child: Row(
-                          children: const [
-                            CircleAvatar(
-                              backgroundImage: AssetImage('assets/profile.jpg'),
-                            ),
-                            SizedBox(width: 12),
-                            Text("User123", style: TextStyle(fontSize: 14)),
-                          ],
-                        ),
-                      ),
-                    ],
+                    ),
                   ),
-                ),
+
+                  const SizedBox(height: 12),
+
+                  // ===== BUTTON BUAT AKUN =====
+                  SizedBox(
+                    width: double.infinity,
+                    child: ElevatedButton(
+                      onPressed: () {},
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.grey.shade300,
+                        elevation: 2,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(25),
+                        ),
+                        padding: const EdgeInsets.symmetric(vertical: 14),
+                      ),
+                      child: const Text(
+                        "Buat Akun",
+                        style: TextStyle(fontSize: 14, color: Colors.black87),
+                      ),
+                    ),
+                  ),
+                ],
               ),
-
-              const SizedBox(height: 20),
-            ],
+            ),
           ),
         ),
       ),

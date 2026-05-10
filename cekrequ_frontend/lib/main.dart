@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'models/paket.dart';
 import 'pages/home_page.dart';
-import 'pages/splash_screen.dart';
+// import 'pages/splash_screen.dart';
 //import 'paket.dart'; // arah ke file paket.dart
 
 void main() {
@@ -19,7 +19,8 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: SplashScreen(), // panggil halaman paket
+      home : HomePage(),
+      // home: SplashScreen(), // panggil halaman paket
     );
   }
 }

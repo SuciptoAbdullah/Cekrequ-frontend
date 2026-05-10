@@ -19,18 +19,18 @@ class _HomePageState extends State<HomePage> {
 
   final List<Paket> daftarPaket = [
     Paket(
-      nama: data,
-      tempat: "Indoor (studio)",
+      nama: "Foto Wedding",
+      tempat: "Outdoor",
       warna: "Hitam",
       harga: 250000,
-      gambar: "assets/image/Wedding4.jpg",
+      gambar: "assets/image/Wedding.jpg",
     ),
     Paket(
-      nama: "Foto Prewedding Outdoor",
+      nama: "Foto Prewedding",
       tempat: "Outdoor",
       warna: "Hitam",
       harga: 300000,
-      gambar: "assets/image/Prewed11.jpg",
+      gambar: "assets/image/Prewed10.jpg",
     ),
     Paket(
       nama: "Foto Bayi Konsep",

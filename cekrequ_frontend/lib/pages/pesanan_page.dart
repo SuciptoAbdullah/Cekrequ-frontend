@@ -8,7 +8,7 @@ class PesananPage extends StatelessWidget {
     {
       "judul": "Foto Wedding Dekorasi",
       "status": "Sukses",
-      "gambar": "assets/image/Wedding4.jpg",
+      "gambar": "assets/image/Wedding6.jpg",
     },
     {
       "judul": "Foto Prewedding Outdoor Adat Jawa",
