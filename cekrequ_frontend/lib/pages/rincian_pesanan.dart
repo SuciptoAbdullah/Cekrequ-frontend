@@ -97,7 +97,7 @@ class DetailPesananPage extends StatelessWidget {
                   decoration: BoxDecoration(
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(20),
-                    boxShadow: [
+                    boxShadow: const [
                       BoxShadow(
                         color: Colors.black12,
                         blurRadius: 6,
@@ -133,21 +133,20 @@ class DetailPesananPage extends StatelessWidget {
                         ),
                       ),
 
-                      const SizedBox(height: 5),
+                      const SizedBox(height: 10),
 
-                      // SUBTITLE
-                      const Text(
-                        "Adat Jawa",
-                        style: TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.w500,
-                          fontFamily: 'Serif',
+                      // STATUS
+                      Text(
+                        "Status: ${data["status"]}",
+                        style: const TextStyle(
+                          fontSize: 16,
+                          color: Colors.green,
+                          fontWeight: FontWeight.bold,
                         ),
                       ),
 
                       const SizedBox(height: 20),
 
-                      // DETAIL INFO
                       buildInfoRow(
                         "Hari/Tanggal",
                         "Minggu, 29 February 2025",
@@ -215,8 +214,8 @@ class DetailPesananPage extends StatelessWidget {
                               padding: EdgeInsets.only(left: 28),
                               child: Text(
                                 "Jl. Ir. H. Juanda, Singajaya, Kec.\n"
-                                "Indramayu, Kabupaten Indramayu, Jawa\n"
-                                "Barat 45218",
+                                "Indramayu, Kabupaten Indramayu,\n"
+                                "Jawa Barat 45218",
                                 style: TextStyle(
                                   color: Colors.grey,
                                   height: 1.5,
@@ -239,14 +238,14 @@ class DetailPesananPage extends StatelessWidget {
 
   Widget buildInfoRow(String title, String value) {
     return Padding(
-      padding: const EdgeInsets.only(bottom: 8),
+      padding: const EdgeInsets.only(bottom: 10),
 
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
 
           SizedBox(
-            width: 100,
+            width: 110,
             child: Text(
               title,
               style: const TextStyle(
