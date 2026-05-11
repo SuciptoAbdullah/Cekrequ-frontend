@@ -1,21 +1,26 @@
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../models/paket.dart';
 import 'galeri_page.dart';
 import 'pesanan_page.dart';
 import 'profil_page.dart';
-import '../services/api_services.dart';
+import 'login_page.dart';
 
 class HomePage extends StatefulWidget {
-  const HomePage({super.key});
+  final String token;
+
+  const HomePage({super.key, required this.token});
 
   @override
   State<HomePage> createState() => _HomePageState();
 }
 
-String data = "";
-
 class _HomePageState extends State<HomePage> {
   int selectedIndex = 0;
+  Map<String, dynamic>? userData;
+  bool isLoading = true;
 
   final List<Paket> daftarPaket = [
     Paket(
@@ -41,23 +46,106 @@ class _HomePageState extends State<HomePage> {
     ),
   ];
 
+  // ===== AMBIL DATA PROFIL =====
+  Future<void> getProfile() async {
+    try {
+      final response = await http.get(
+        Uri.parse('https://gilberto-unpercussive-dara.ngrok-free.dev/api/user/profile'),
+        headers: {
+          'Authorization': 'Bearer ${widget.token}',
+          'Accept': 'application/json',
+          'ngrok-skip-browser-warning': 'true',
+        },
+      );
+
+      print("Profile Status: ${response.statusCode}");
+      print("Profile Response: ${response.body}");
+
+      if (response.statusCode == 200) {
+        var data = jsonDecode(response.body);
+        setState(() {
+          userData = data['data'] ?? data;
+          isLoading = false;
+        });
+      } else {
+        setState(() {
+          isLoading = false;
+        });
+      }
+    } catch (e) {
+      print("Error getProfile: $e");
+      setState(() {
+        isLoading = false;
+      });
+    }
+  }
+
+  // ===== FUNGSI LOGOUT =====
+  Future<void> _logout(BuildContext context) async {
+    // Tampilkan konfirmasi
+    final confirm = await showDialog<bool>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text("Konfirmasi Logout"),
+        content: const Text("Apakah Anda yakin ingin keluar?"),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context, false),
+            child: const Text("Batal"),
+          ),
+          TextButton(
+            onPressed: () => Navigator.pop(context, true),
+            child: const Text(
+              "Logout",
+              style: TextStyle(color: Colors.red),
+            ),
+          ),
+        ],
+      ),
+    );
+
+    if (confirm == true) {
+      // Hapus token dari SharedPreferences
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.remove('access_token');
+      
+      if (context.mounted) {
+        // Kembali ke halaman login
+        Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(builder: (context) => LoginPage()),
+          (route) => false,
+        );
+      }
+    }
+  }
+
+  // ===== INIT STATE =====
+  @override
+  void initState() {
+    super.initState();
+    getProfile();
+  }
+
   // ===== LIST PAGE =====
   List<Widget> get pages => [
     homeContent(),
-    PesananPage(),
+    PesananPage(token: widget.token),
     const GalleryPage(),
-    const ProfilPage(),
+    ProfilPage(
+      userData: userData,
+      onLogout: () => _logout(context),
+    ),
   ];
 
+  // ===== BUILD =====
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFFE5E5E5),
 
-      // ===== BODY DINAMIS =====
       body: pages[selectedIndex],
 
-      // ===== NAVBAR =====
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: selectedIndex,
         onTap: (index) {
@@ -94,19 +182,21 @@ class _HomePageState extends State<HomePage> {
               ),
               child: Row(
                 children: [
-                  const Expanded(
+                  Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          "Halo User!",
-                          style: TextStyle(
+                          isLoading
+                              ? "Halo..."
+                              : "Halo ${userData?['username'] ?? userData?['name'] ?? 'User'}!",
+                          style: const TextStyle(
                             fontSize: 24,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
-                        SizedBox(height: 8),
-                        Text(
+                        const SizedBox(height: 8),
+                        const Text(
                           "Selamat datang di aplikasi cekrekqu.\nAbadikan setiap momen spesialmu bersama kami.",
                           style: TextStyle(color: Colors.grey),
                         ),
@@ -142,7 +232,9 @@ class _HomePageState extends State<HomePage> {
                         ),
                       ),
                       ElevatedButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          // TODO: Navigasi ke halaman buat pesanan
+                        },
                         child: const Text("+ Buat Pesanan"),
                       ),
                     ],
@@ -153,7 +245,6 @@ class _HomePageState extends State<HomePage> {
                     child: Chip(label: Text("Terbaru")),
                   ),
                   const SizedBox(height: 10),
-
                   Column(
                     children: daftarPaket.map((paket) {
                       return paketCard(paket);
@@ -162,7 +253,6 @@ class _HomePageState extends State<HomePage> {
                 ],
               ),
             ),
-
             const SizedBox(height: 20),
           ],
         ),
@@ -170,7 +260,7 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  // ===== CARD =====
+  // ===== CARD PAKET =====
   Widget paketCard(Paket paket) {
     return Container(
       margin: const EdgeInsets.only(bottom: 12),
@@ -222,7 +312,12 @@ class _HomePageState extends State<HomePage> {
             children: [
               const Icon(Icons.shopping_cart),
               const SizedBox(height: 5),
-              ElevatedButton(onPressed: () {}, child: const Text("Beli")),
+              ElevatedButton(
+                onPressed: () {
+                  // TODO: Tambah ke keranjang / proses pesanan
+                },
+                child: const Text("Beli"),
+              ),
             ],
           ),
         ],

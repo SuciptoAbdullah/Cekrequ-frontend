@@ -1,80 +1,80 @@
 import 'package:flutter/material.dart';
 
 class ProfilPage extends StatelessWidget {
-  const ProfilPage({super.key});
+  final Map<String, dynamic>? userData;
+  final VoidCallback? onLogout;
+  final bool isLoading; // 🔥 Tambahan opsional
+
+  const ProfilPage({
+    super.key,
+    this.userData,
+    this.onLogout,
+    this.isLoading = false, // Default false
+  });
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFE5E5E5),
-
-      body: SafeArea(
-        child: Center(
-          // biar card di tengah
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20),
-            child: Container(
-              padding: const EdgeInsets.all(20),
-              decoration: BoxDecoration(
-                color: Colors.grey.shade200,
-                borderRadius: BorderRadius.circular(20),
-              ),
-
-              child: Column(
-                mainAxisSize: MainAxisSize.max,
-                children: [
-                  const Text(
-                    "Profile",
-                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                  ),
-
-                  const SizedBox(height: 200),
-
-                  // ===== BUTTON MASUK =====
-                  SizedBox(
-                    width: double.infinity,
-                    child: ElevatedButton(
-                      onPressed: () {},
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.blue,
-                        elevation: 3,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(25),
-                        ),
-                        padding: const EdgeInsets.symmetric(vertical: 14),
-                      ),
-                      child: const Text(
-                        "Masuk",
-                        style: TextStyle(fontSize: 14),
-                      ),
-                    ),
-                  ),
-
-                  const SizedBox(height: 12),
-
-                  // ===== BUTTON BUAT AKUN =====
-                  SizedBox(
-                    width: double.infinity,
-                    child: ElevatedButton(
-                      onPressed: () {},
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.grey.shade300,
-                        elevation: 2,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(25),
-                        ),
-                        padding: const EdgeInsets.symmetric(vertical: 14),
-                      ),
-                      child: const Text(
-                        "Buat Akun",
-                        style: TextStyle(fontSize: 14, color: Colors.black87),
-                      ),
-                    ),
-                  ),
-                ],
+      appBar: AppBar(
+        title: const Text("Profil"),
+        backgroundColor: Colors.blue,
+        foregroundColor: Colors.white,
+      ),
+      body: SingleChildScrollView(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          children: [
+            const CircleAvatar(
+              radius: 50,
+              backgroundImage: NetworkImage("https://i.pravatar.cc/150"),
+            ),
+            const SizedBox(height: 16),
+            Card(
+              child: ListTile(
+                leading: const Icon(Icons.person),
+                title: const Text("Username"),
+                subtitle: Text(
+                  userData?['username'] ?? 
+                  userData?['name'] ?? 
+                  userData?['data']?['username'] ?? // Tambahan nested data
+                  "Belum tersedia"
+                ),
               ),
             ),
-          ),
+            Card(
+              child: ListTile(
+                leading: const Icon(Icons.email),
+                title: const Text("Email"),
+                subtitle: Text(
+                  userData?['email'] ?? 
+                  userData?['data']?['email'] ?? // Tambahan nested data
+                  "Belum tersedia"
+                ),
+              ),
+            ),
+            const SizedBox(height: 20),
+            SizedBox(
+              width: double.infinity,
+              child: ElevatedButton(
+                onPressed: isLoading ? null : onLogout, // 🔥 Disable jika loading
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.red,
+                  foregroundColor: Colors.white,
+                  padding: const EdgeInsets.symmetric(vertical: 12),
+                ),
+                child: isLoading
+                    ? const SizedBox(
+                        height: 20,
+                        width: 20,
+                        child: CircularProgressIndicator(
+                          strokeWidth: 2,
+                          valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                        ),
+                      )
+                    : const Text("Logout", style: TextStyle(fontSize: 16)),
+              ),
+            ),
+          ],
         ),
       ),
     );

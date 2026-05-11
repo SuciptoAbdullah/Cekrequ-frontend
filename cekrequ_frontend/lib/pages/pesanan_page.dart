@@ -2,7 +2,7 @@ import 'package:cekrequ_frontend/pages/rincian_pesanan.dart';
 import 'package:flutter/material.dart';
 
 class PesananPage extends StatelessWidget {
-  PesananPage({super.key});
+  PesananPage({super.key, required String token});
 
   final List<Map<String, dynamic>> pesanan = [
     {

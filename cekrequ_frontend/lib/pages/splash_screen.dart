@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
 import 'dart:async';
-import 'login_page.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:cekrequ_frontend/pages/login_page.dart';
+import 'package:cekrequ_frontend/pages/home_page.dart'; // 🔥 Import HomePage
 
 class SplashScreen extends StatefulWidget {
+  const SplashScreen({super.key});
+
   @override
-  _SplashScreenState createState() => _SplashScreenState();
+  State<SplashScreen> createState() => _SplashScreenState();
 }
 
 class _SplashScreenState extends State<SplashScreen> {
@@ -13,12 +17,33 @@ class _SplashScreenState extends State<SplashScreen> {
   void initState() {
     super.initState();
 
-    Timer(Duration(seconds: 3), () {
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) => LoginPage()),
-      );
-    });
+    Timer(const Duration(seconds: 3), () async { // 🔥 Tambah async
+      // 🔥 Ambil token dari SharedPreferences
+      final prefs = await SharedPreferences.getInstance();
+      final token = prefs.getString('access_token');
+      
+      print("🔍 Token di SplashScreen: $token");
+      
+      if (context.mounted) {
+        if (token != null && token.isNotEmpty) {
+          // Token ada, langsung ke HomePage
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder: (context) => HomePage(token: token), // 🔥 Kirim token
+            ),
+          );
+        } else {
+          // Token tidak ada, ke LoginPage
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder: (context) =>  LoginPage(),
+            ),
+          );
+        }
+      }
+    }); // 🔥 Tutup Timer dengan benar
   }
 
   @override
@@ -29,12 +54,9 @@ class _SplashScreenState extends State<SplashScreen> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Image.asset(
-              'assets/image/logo.jpeg', 
-              width: 150,
-            ),
-            SizedBox(height: 20),
-            Text(
+            Image.asset('assets/image/Logo.jpeg', width: 150),
+            const SizedBox(height: 20),
+            const Text(
               "FANESYA PHOTO STUDIO",
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             )
