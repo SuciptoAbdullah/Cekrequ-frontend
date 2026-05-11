@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:cekrequ_frontend/pages/splash_screen.dart'; // 🔥 Import SplashScreen
-// import 'models/paket.dart'; // Tidak perlu di sini
+import 'package:cekrequ_frontend/pages/splash_screen.dart';
 
 void main() {
   runApp(const MyApp());
@@ -17,7 +16,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: const SplashScreen(), // 🔥 Gunakan SplashScreen sebagai halaman awal
+      home: const SplashScreen(),
     );
   }
 }
