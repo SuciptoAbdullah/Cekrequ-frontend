@@ -46,14 +46,15 @@ class GalleryPage extends StatelessWidget {
       backgroundColor: Colors.white,
 
       appBar: AppBar(
-        title: const Text("Daftar Gambar"),
-        centerTitle: true,
-        actions: const [
-          Icon(Icons.shopping_cart_outlined),
-          SizedBox(width: 10),
-          Icon(Icons.notifications_none),
-          SizedBox(width: 10),
-        ],
+        backgroundColor: Colors.grey[200],
+        elevation: 0,
+        automaticallyImplyLeading: false,
+        toolbarHeight: 80,
+
+        title: Padding(
+          padding: const EdgeInsets.only(left: 8),
+          child: Image.asset("assets/image/logo.png", height: 45, fit: BoxFit.contain,),
+          ),
       ),
 
       body: Padding(
