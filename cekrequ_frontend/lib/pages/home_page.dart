@@ -3,6 +3,7 @@ import '../models/paket.dart';
 import 'galeri_page.dart';
 import 'pesanan_page.dart';
 import 'profil_page.dart';
+import 'rincian_pesanan.dart';
 import '../services/api_services.dart';
 
 class HomePage extends StatefulWidget {

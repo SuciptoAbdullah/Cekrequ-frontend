@@ -39,17 +39,15 @@ class PesananPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Daftar Pesanan"),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.shopping_cart_outlined),
-            onPressed: () {},
+        backgroundColor: Colors.grey[200],
+        elevation: 0,
+        automaticallyImplyLeading: false,
+        toolbarHeight: 80,
+
+        title: Padding(
+          padding: const EdgeInsets.only(left: 8),
+          child: Image.asset("assets/image/logo.png", height: 45, fit: BoxFit.contain,),
           ),
-          IconButton(
-            icon: const Icon(Icons.notifications_none),
-            onPressed: () {},
-          ),
-        ],
       ),
       body: Column(
         children: [

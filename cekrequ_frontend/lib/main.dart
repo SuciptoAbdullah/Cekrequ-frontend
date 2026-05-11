@@ -19,7 +19,11 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
+<<<<<<< Updated upstream
       home : HomePage(),
+=======
+      home: HomePage(),
+>>>>>>> Stashed changes
       // home: SplashScreen(), // panggil halaman paket
     );
   }
