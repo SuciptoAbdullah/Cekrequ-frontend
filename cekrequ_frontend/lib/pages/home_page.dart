@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../models/paket.dart';
@@ -10,8 +9,13 @@ import 'login_page.dart';
 
 class HomePage extends StatefulWidget {
   final String token;
+  final Map<String, dynamic>? userData; // 🔥 Tambahkan ini
 
-  const HomePage({super.key, required this.token});
+  const HomePage({
+    super.key, 
+    required this.token,
+    this.userData, // 🔥 Terima user data dari login
+  });
 
   @override
   State<HomePage> createState() => _HomePageState();
@@ -21,6 +25,7 @@ class _HomePageState extends State<HomePage> {
   int selectedIndex = 0;
   Map<String, dynamic>? userData;
   bool isLoading = true;
+  String? errorMessage;
 
   final List<Paket> daftarPaket = [
     Paket(
@@ -48,41 +53,47 @@ class _HomePageState extends State<HomePage> {
 
   // ===== AMBIL DATA PROFIL =====
   Future<void> getProfile() async {
+    // 🔥 Jika sudah ada userData dari login, gunakan langsung
+    if (widget.userData != null) {
+      print("✅ Menggunakan userData dari login: ${widget.userData}");
+      setState(() {
+        userData = widget.userData;
+        isLoading = false;
+        errorMessage = null;
+      });
+      return;
+    }
+    
+    // Jika tidak ada, coba ambil dari SharedPreferences
     try {
-      final response = await http.get(
-        Uri.parse('https://gilberto-unpercussive-dara.ngrok-free.dev/api/user/profile'),
-        headers: {
-          'Authorization': 'Bearer ${widget.token}',
-          'Accept': 'application/json',
-          'ngrok-skip-browser-warning': 'true',
-        },
-      );
-
-      print("Profile Status: ${response.statusCode}");
-      print("Profile Response: ${response.body}");
-
-      if (response.statusCode == 200) {
-        var data = jsonDecode(response.body);
+      final prefs = await SharedPreferences.getInstance();
+      final savedUserData = prefs.getString('user_data');
+      
+      if (savedUserData != null) {
+        print("✅ Mengambil userData dari SharedPreferences");
         setState(() {
-          userData = data['data'] ?? data;
+          userData = jsonDecode(savedUserData);
           isLoading = false;
         });
-      } else {
-        setState(() {
-          isLoading = false;
-        });
+        return;
       }
     } catch (e) {
-      print("Error getProfile: $e");
-      setState(() {
-        isLoading = false;
-      });
+      print("Error ambil dari SharedPreferences: $e");
     }
+    
+    // 🔥 Jika semua gagal, buat data dasar dari token atau identifier
+    setState(() {
+      userData = {
+        'username': 'User',
+        'email': 'user@email.com',
+      };
+      isLoading = false;
+      errorMessage = "Menggunakan data default";
+    });
   }
 
   // ===== FUNGSI LOGOUT =====
   Future<void> _logout(BuildContext context) async {
-    // Tampilkan konfirmasi
     final confirm = await showDialog<bool>(
       context: context,
       builder: (context) => AlertDialog(
@@ -105,15 +116,14 @@ class _HomePageState extends State<HomePage> {
     );
 
     if (confirm == true) {
-      // Hapus token dari SharedPreferences
       final prefs = await SharedPreferences.getInstance();
       await prefs.remove('access_token');
+      await prefs.remove('user_data'); // 🔥 Hapus juga user data
       
       if (context.mounted) {
-        // Kembali ke halaman login
         Navigator.pushAndRemoveUntil(
           context,
-          MaterialPageRoute(builder: (context) =>  LoginPage()),
+          MaterialPageRoute(builder: (context) => LoginPage()),
           (route) => false,
         );
       }
@@ -135,6 +145,7 @@ class _HomePageState extends State<HomePage> {
     ProfilPage(
       userData: userData,
       onLogout: () => _logout(context),
+      isLoading: isLoading,
     ),
   ];
 
@@ -143,9 +154,7 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFFE5E5E5),
-
       body: pages[selectedIndex],
-
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: selectedIndex,
         onTap: (index) {
@@ -211,6 +220,29 @@ class _HomePageState extends State<HomePage> {
               ),
             ),
 
+            // PESAN ERROR (jika ada)
+            if (errorMessage != null)
+              Container(
+                margin: const EdgeInsets.symmetric(horizontal: 16),
+                padding: const EdgeInsets.all(12),
+                decoration: BoxDecoration(
+                  color: Colors.orange[100],
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: Row(
+                  children: [
+                    const Icon(Icons.info, color: Colors.orange),
+                    const SizedBox(width: 10),
+                    Expanded(
+                      child: Text(
+                        errorMessage!,
+                        style: const TextStyle(color: Colors.orange),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+
             // DAFTAR PAKET
             Container(
               margin: const EdgeInsets.symmetric(horizontal: 16),
@@ -245,11 +277,13 @@ class _HomePageState extends State<HomePage> {
                     child: Chip(label: Text("Terbaru")),
                   ),
                   const SizedBox(height: 10),
-                  Column(
-                    children: daftarPaket.map((paket) {
-                      return paketCard(paket);
-                    }).toList(),
-                  ),
+                  isLoading
+                      ? const Center(child: CircularProgressIndicator())
+                      : Column(
+                          children: daftarPaket.map((paket) {
+                            return paketCard(paket);
+                          }).toList(),
+                        ),
                 ],
               ),
             ),

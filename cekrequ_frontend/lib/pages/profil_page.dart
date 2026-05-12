@@ -3,13 +3,13 @@ import 'package:flutter/material.dart';
 class ProfilPage extends StatelessWidget {
   final Map<String, dynamic>? userData;
   final VoidCallback? onLogout;
-  final bool isLoading; // 🔥 Tambahan opsional
+  final bool isLoading;
 
   const ProfilPage({
     super.key,
     this.userData,
     this.onLogout,
-    this.isLoading = false, // Default false
+    this.isLoading = false,
   });
 
   @override
@@ -29,38 +29,65 @@ class ProfilPage extends StatelessWidget {
               backgroundImage: NetworkImage("https://i.pravatar.cc/150"),
             ),
             const SizedBox(height: 16),
-            Card(
-              child: ListTile(
-                leading: const Icon(Icons.person),
-                title: const Text("Username"),
-                subtitle: Text(
-                  userData?['username'] ?? 
-                  userData?['name'] ?? 
-                  userData?['data']?['username'] ?? // Tambahan nested data
-                  "Belum tersedia"
+            
+            if (isLoading)
+              const Center(child: CircularProgressIndicator())
+            else ...[
+              Card(
+                elevation: 2,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: ListTile(
+                  leading: const Icon(Icons.person, color: Colors.blue),
+                  title: const Text(
+                    "Username",
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                  subtitle: Text(
+                    userData?['username'] ?? 
+                    userData?['name'] ?? 
+                    userData?['data']?['username'] ?? 
+                    "Belum tersedia",
+                    style: const TextStyle(fontSize: 16),
+                  ),
                 ),
               ),
-            ),
-            Card(
-              child: ListTile(
-                leading: const Icon(Icons.email),
-                title: const Text("Email"),
-                subtitle: Text(
-                  userData?['email'] ?? 
-                  userData?['data']?['email'] ?? // Tambahan nested data
-                  "Belum tersedia"
+              const SizedBox(height: 12),
+              Card(
+                elevation: 2,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: ListTile(
+                  leading: const Icon(Icons.email, color: Colors.blue),
+                  title: const Text(
+                    "Email",
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                  subtitle: Text(
+                    userData?['email'] ?? 
+                    userData?['data']?['email'] ?? 
+                    "Belum tersedia",
+                    style: const TextStyle(fontSize: 16),
+                  ),
                 ),
               ),
-            ),
-            const SizedBox(height: 20),
+            ],
+            
+            const SizedBox(height: 30),
+            
             SizedBox(
               width: double.infinity,
               child: ElevatedButton(
-                onPressed: isLoading ? null : onLogout, // 🔥 Disable jika loading
+                onPressed: isLoading ? null : onLogout,
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.red,
                   foregroundColor: Colors.white,
-                  padding: const EdgeInsets.symmetric(vertical: 12),
+                  padding: const EdgeInsets.symmetric(vertical: 14),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
                 ),
                 child: isLoading
                     ? const SizedBox(

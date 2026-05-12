@@ -37,7 +37,7 @@ class LoginPage extends StatelessWidget {
           'Accept': 'application/json',
         },
         body: jsonEncode({
-          'identifier': identifierController.text, // Ganti 'identifier' jadi 'email'
+          'identifier': identifierController.text,
           'password': passwordController.text,
         }),
       );
@@ -51,15 +51,29 @@ class LoginPage extends StatelessWidget {
       if (response.statusCode == 200) {
         var data = jsonDecode(response.body);
         
+        print("🔍 FULL RESPONSE: $data");
+        
         // Ambil token
         var token = data['data']['token'];
         
+        // 🔥 BUAT DATA USER DARI INPUTAN LOGIN
+        // Karena response tidak mengirimkan data user, kita buat sendiri
+        Map<String, dynamic> userData = {
+          'username': identifierController.text.split('@')[0], // Ambil nama sebelum @ jika email
+          'email': identifierController.text,
+          'name': identifierController.text.split('@')[0],
+        };
+        
+        print("✅ User data yang akan disimpan: $userData");
+        
         if (token != null) {
-          // Simpan token
+          // Simpan token dan user data
           final prefs = await SharedPreferences.getInstance();
           await prefs.setString('access_token', token);
+          await prefs.setString('user_data', jsonEncode(userData));
           
           print("✅ Token tersimpan: $token");
+          print("✅ User data tersimpan: $userData");
           
           // Tampilkan pesan sukses
           if (context.mounted) {
@@ -67,11 +81,14 @@ class LoginPage extends StatelessWidget {
               const SnackBar(content: Text("Login berhasil!"), backgroundColor: Colors.green),
             );
             
-            // Pindah ke halaman Home
+            // Pindah ke halaman Home dengan membawa user data
             Navigator.pushReplacement(
               context,
               MaterialPageRoute(
-                builder: (context) => HomePage(token: token),
+                builder: (context) => HomePage(
+                  token: token,
+                  userData: userData, // Kirim user data
+                ),
               ),
             );
           }
@@ -87,14 +104,25 @@ class LoginPage extends StatelessWidget {
         }
       } else {
         // Login gagal
-        var data = jsonDecode(response.body);
-        if (context.mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text(data['massage'] ?? "Login gagal!"),
-              backgroundColor: Colors.red,
-            ),
-          );
+        try {
+          var data = jsonDecode(response.body);
+          if (context.mounted) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text(data['massage'] ?? data['message'] ?? "Login gagal!"),
+                backgroundColor: Colors.red,
+              ),
+            );
+          }
+        } catch (e) {
+          if (context.mounted) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(
+                content: Text("Login gagal!"),
+                backgroundColor: Colors.red,
+              ),
+            );
+          }
         }
       }
     } catch (e) {
