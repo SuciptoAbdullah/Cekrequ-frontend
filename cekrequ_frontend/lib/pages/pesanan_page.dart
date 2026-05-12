@@ -77,7 +77,7 @@ class PesananPage extends StatelessWidget {
                     Navigator.push(
                       context, MaterialPageRoute(builder: (context) => DetailPesananPage(data: item))
                     );
-                  },
+                  }, 
                   child: Card(
                   elevation: 3,
                   margin: const EdgeInsets.symmetric(
