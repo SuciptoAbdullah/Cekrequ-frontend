@@ -103,7 +103,7 @@ class _PembelianPageState extends State<PembelianPage> {
                             ),
                             const SizedBox(height: 4),
                             Text("Harga: Rp ${widget.paket.harga}", style: const TextStyle(color: Colors.blue, fontWeight: FontWeight.w600)),
-                            Text("Tempat: ${widget.paket.tempat} | Warna: ${widget.paket.warna}", style: const TextStyle(fontSize: 12, color: Colors.grey)),
+                            // Text("Tempat: ${widget.paket.tempat} | Warna: ${widget.paket.warna}", style: const TextStyle(fontSize: 12, color: Colors.grey)),
                           ],
                         ),
                       ),
