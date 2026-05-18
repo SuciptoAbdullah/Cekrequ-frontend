@@ -1,7 +1,7 @@
 class Paket {
   String nama;
   String tempat;
-  String warna;
+  // String warna;
   int harga;
   String gambar;
 
@@ -12,7 +12,7 @@ class Paket {
   Paket({
     required this.nama,
     required this.tempat,
-    required this.warna,
+    // required this.warna,
     required this.harga,
     required this.gambar,
 

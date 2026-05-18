@@ -445,7 +445,7 @@ class _HomePageState extends State<HomePage> {
                 const SizedBox(height: 4),
 
                 Text("Tempat: ${paket.tempat}"),
-                Text("Warna: ${paket.warna}"),
+                // Text("Warna: ${paket.warna}"),
                 Text("Harga: Rp ${paket.harga}"),
               ],
             ),
