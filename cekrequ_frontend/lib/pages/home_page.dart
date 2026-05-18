@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'pembelian_page.dart'; // Sesuaikan dengan struktur folder Anda jika berbeda
 
 import '../models/paket.dart';
 import 'data_paket.dart';
@@ -455,14 +456,18 @@ class _HomePageState extends State<HomePage> {
 
           Column(
             children: [
-
               const Icon(Icons.shopping_cart),
-
               const SizedBox(height: 5),
-
               ElevatedButton(
-                onPressed: () {},
-
+                onPressed: () {
+                  // Pindah ke halaman pembelian dengan membawa data paket saat ini
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => PembelianPage(paket: paket),
+                    ),
+                  );
+                },
                 child: const Text("Beli"),
               ),
             ],

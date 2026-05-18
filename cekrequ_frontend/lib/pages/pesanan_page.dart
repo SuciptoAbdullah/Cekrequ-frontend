@@ -163,25 +163,6 @@ class PesananPage extends StatelessWidget {
               },
             ),
           ),
-
-          // BUTTON
-          Padding(
-            padding: const EdgeInsets.all(12),
-            child: SizedBox(
-              width: double.infinity,
-              child: ElevatedButton(
-                onPressed: () {},
-                style: ElevatedButton.styleFrom(
-                  padding: const EdgeInsets.symmetric(vertical: 15),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                  backgroundColor: Colors.blue,
-                ),
-                child: const Text("+ Buat Pesanan"),
-              ),
-            ),
-          ),
         ],
       ),
     );
