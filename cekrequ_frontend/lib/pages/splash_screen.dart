@@ -54,7 +54,7 @@ class _SplashScreenState extends State<SplashScreen> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Image.asset('assets/logo/logo.jpeg', width: 150),
+            Image.asset('assets/logo/logo.png', width: 150),
             const SizedBox(height: 20),
             const Text(
               "FANESYA PHOTO STUDIO",
