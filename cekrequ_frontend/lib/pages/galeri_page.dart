@@ -1,44 +1,16 @@
 import 'package:flutter/material.dart';
+import 'detail_paket_page.dart';
+import '../models/paket.dart';
 
 class GalleryPage extends StatelessWidget {
-  const GalleryPage({super.key});
+  final String title;
+  final List<Paket> packages;
 
-  Widget buildItem(
-    BuildContext context, String title, String desc, String img) {
-    return InkWell(
-      onTap: () {},
-        child: Container(
-          margin: const EdgeInsets.symmetric(vertical: 8),
-          padding: const EdgeInsets.all(10),
-          decoration: BoxDecoration(
-            color: Colors.grey[200],
-            borderRadius: BorderRadius.circular(15),
-          ),
-          child: Row(
-            children: [
-              ClipRRect(
-                borderRadius: BorderRadius.circular(12),
-                child: Image.asset(img, width: 80, height: 80, fit: BoxFit.cover),
-              ),
-              const SizedBox(width: 12),
-
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(title, style: const TextStyle(
-                      fontWeight: FontWeight.bold, fontSize: 16,
-                    ),),
-                    const SizedBox(height: 5),
-                    Text(desc, style: const TextStyle(color: Colors.grey),),
-                  ],
-                ),
-              ),
-            ],
-          ),
-        ),
-    );
-  }
+  const GalleryPage({
+    super.key,
+    required this.title,
+    required this.packages,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -46,36 +18,67 @@ class GalleryPage extends StatelessWidget {
       backgroundColor: Colors.white,
 
       appBar: AppBar(
-        title: const Text("Daftar Gambar"),
-        centerTitle: true,
-        actions: const [
-          Icon(Icons.shopping_cart_outlined),
-          SizedBox(width: 10),
-          Icon(Icons.notifications_none),
-          SizedBox(width: 10),
-        ],
+        backgroundColor: Colors.white,
+        elevation: 0,
+
+        leading: IconButton(
+          icon: const Icon(
+            Icons.arrow_back,
+            color: Colors.black,
+          ),
+
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
+
+        title: Text(
+          title,
+
+          style: const TextStyle(
+            color: Colors.black,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
       ),
 
       body: Padding(
         padding: const EdgeInsets.all(12),
-        child: Column(
-          children: [
-            const Text("Jelajahi", style: TextStyle(fontSize: 20, fontWeight:FontWeight.bold),),
-            const SizedBox(height: 5),
-            const Text("Klik untuk info lebih detail"),
-            const SizedBox(height: 15),
 
-            Expanded(
-              child: ListView(
-                children: [
-                  buildItem(context, "Prewedding", "butuh foto formal? pesan yang ini saja :D", "assets/image/Prewed10.jpg"),
-                  buildItem(context, "Wedding", "Yakin mau nikah tapi tidak diabadikan?", "assets/image/Wedding6.jpg"),
-                  buildItem(context, "Baby", "Abadikan momen dengan paket foto ini", "assets/image/baby1.jpg"),
-                  buildItem(context, "Maternity", "Abadikan momen dengan paket foto ini", "assets/image/Maternity1.jpg"),
-                ],
+        child: GridView.builder(
+          itemCount: packages.length,
+
+          gridDelegate:
+              const SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 2,
+            crossAxisSpacing: 12,
+            mainAxisSpacing: 12,
+            childAspectRatio: 0.75,
+          ),
+
+          itemBuilder: (context, index) {
+            return InkWell(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (_) => DetailPaketPage(
+                      package: packages[index],
+                    ),
+                  ),
+                );
+              },
+
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(20),
+
+                child: Image.asset(
+                  packages[index].gambar,
+                  fit: BoxFit.cover,
+                ),
               ),
-            ),
-          ],
+            );
+          },
         ),
       ),
     );
