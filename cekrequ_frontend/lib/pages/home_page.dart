@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'pembelian_page.dart'; // Sesuaikan dengan struktur folder Anda jika berbeda
 
 import '../models/paket.dart';
 import 'data_paket.dart';
@@ -11,31 +10,23 @@ import 'pesanan_page.dart';
 import 'profil_page.dart';
 import 'login_page.dart';
 
-
 // ===== HOME PAGE =====
-
 class HomePage extends StatefulWidget {
   final String token;
   final Map<String, dynamic>? userData;
 
-  const HomePage({
-    super.key,
-    required this.token,
-    this.userData,
-  });
+  const HomePage({super.key, required this.token, this.userData});
 
   @override
   State<HomePage> createState() => _HomePageState();
 }
 
 class _HomePageState extends State<HomePage> {
-
   int selectedIndex = 0;
   Map<String, dynamic>? userData;
   bool isLoading = true;
-  String? errorMessage;
 
-  // ===== DATA PAKET DARI data_paket.dart =====
+// ===== DATA PAKET DARI data_paket.dart =====
 
   final List<Paket> daftarPaket = [
     ...kategoriPaket["Prewedding"]!,
@@ -45,29 +36,23 @@ class _HomePageState extends State<HomePage> {
     ...kategoriPaket["Personal"]!,
   ];
 
-  // ===== AMBIL DATA PROFIL =====
-
+// ===== AMBIL DATA PROFIL =====
   Future<void> getProfile() async {
-
     if (widget.userData != null) {
       setState(() {
         userData = widget.userData;
         isLoading = false;
-        errorMessage = null;
       });
 
       return;
     }
 
     try {
-
       final prefs = await SharedPreferences.getInstance();
 
-      final savedUserData =
-          prefs.getString('user_data');
+      final savedUserData = prefs.getString('user_data');
 
       if (savedUserData != null) {
-
         setState(() {
           userData = jsonDecode(savedUserData);
           isLoading = false;
@@ -75,85 +60,34 @@ class _HomePageState extends State<HomePage> {
 
         return;
       }
-
     } catch (e) {
       print(e);
     }
 
     setState(() {
-      userData = {
-        'username': 'User',
-        'email': 'user@email.com',
-      };
+      userData = {'username': 'User'};
 
       isLoading = false;
-      errorMessage = "Menggunakan data default";
     });
   }
 
-  // ===== LOGOUT =====
-
+// ===== LOGOUT =====
   Future<void> _logout(BuildContext context) async {
+    final prefs = await SharedPreferences.getInstance();
 
-    final confirm = await showDialog<bool>(
-      context: context,
+    await prefs.remove('access_token');
+    await prefs.remove('user_data');
 
-      builder: (context) => AlertDialog(
-        title: const Text("Konfirmasi Logout"),
+    if (context.mounted) {
+      Navigator.pushAndRemoveUntil(
+        context,
 
-        content: const Text(
-          "Apakah Anda yakin ingin keluar?",
-        ),
+        MaterialPageRoute(builder: (context) => LoginPage()),
 
-        actions: [
-
-          TextButton(
-            onPressed: () =>
-                Navigator.pop(context, false),
-
-            child: const Text("Batal"),
-          ),
-
-          TextButton(
-            onPressed: () =>
-                Navigator.pop(context, true),
-
-            child: const Text(
-              "Logout",
-
-              style: TextStyle(
-                color: Colors.red,
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-
-    if (confirm == true) {
-
-      final prefs =
-          await SharedPreferences.getInstance();
-
-      await prefs.remove('access_token');
-      await prefs.remove('user_data');
-
-      if (context.mounted) {
-
-        Navigator.pushAndRemoveUntil(
-          context,
-
-          MaterialPageRoute(
-            builder: (context) => LoginPage(),
-          ),
-
-          (route) => false,
-        );
-      }
+        (route) => false,
+      );
     }
   }
-
-  // ===== INIT =====
 
   @override
   void initState() {
@@ -161,15 +95,10 @@ class _HomePageState extends State<HomePage> {
     getProfile();
   }
 
-  // ===== LIST PAGE =====
-
   List<Widget> get pages => [
-
     homeContent(),
 
-    PesananPage(
-      token: widget.token,
-    ),
+    PesananPage(token: widget.token),
 
     const JelajahiPage(),
 
@@ -180,22 +109,17 @@ class _HomePageState extends State<HomePage> {
     ),
   ];
 
-  // ===== BUILD =====
-
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       backgroundColor: const Color(0xFFE5E5E5),
 
       body: pages[selectedIndex],
 
       bottomNavigationBar: BottomNavigationBar(
-
         currentIndex: selectedIndex,
 
         onTap: (index) {
-
           setState(() {
             selectedIndex = index;
           });
@@ -203,272 +127,325 @@ class _HomePageState extends State<HomePage> {
 
         type: BottomNavigationBarType.fixed,
 
-        selectedItemColor: Colors.blue,
+        selectedItemColor: Colors.black,
+
         unselectedItemColor: Colors.grey,
 
+        backgroundColor: Colors.white,
+        elevation: 10,
+
         items: const [
+          BottomNavigationBarItem(
+            icon: Icon(Icons.home), 
+            label: "Beranda"
+            ),
 
           BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: "Beranda",
-          ),
+            icon: Icon(Icons.receipt), 
+            label: "Pesanan"
+            ),
 
           BottomNavigationBarItem(
-            icon: Icon(Icons.receipt),
-            label: "Pesanan",
-          ),
+            icon: Icon(Icons.image), 
+            label: "Galeri"
+            ),
 
           BottomNavigationBarItem(
-            icon: Icon(Icons.image),
-            label: "Galeri",
-          ),
-
-          BottomNavigationBarItem(
-            icon: Icon(Icons.person),
-            label: "Profil",
-          ),
+            icon: Icon(Icons.person), 
+            label: "Profil"
+            ),
         ],
       ),
     );
   }
 
-  // ===== HOME CONTENT =====
-
   Widget homeContent() {
-
     return SafeArea(
       child: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(16),
 
-        child: Column(
-          children: [
+          child: Column(
+            children: [
+               
+              // ===== HEADER =====
+              Container(
+                padding: const EdgeInsets.all(18),
 
-            // ===== HEADER =====
+                decoration: BoxDecoration(
+                  color: Colors.white,
 
-            Container(
-              padding: const EdgeInsets.all(16),
-              margin: const EdgeInsets.all(16),
+                  borderRadius: BorderRadius.circular(22),
 
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(20),
-              ),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withValues(alpha: 0.05),
 
-              child: Row(
-                children: [
-
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment:
-                          CrossAxisAlignment.start,
-
-                      children: [
-
-                        Text(
-                          isLoading
-                              ? "Halo..."
-                              : "Halo ${userData?['username'] ?? 'User'}!",
-
-                          style: const TextStyle(
-                            fontSize: 24,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-
-                        const SizedBox(height: 8),
-
-                        const Text(
-                          "Selamat datang di aplikasi cekrekqu.\nAbadikan setiap momen spesialmu bersama kami.",
-
-                          style: TextStyle(
-                            color: Colors.grey,
-                          ),
-                        ),
-                      ],
+                      blurRadius: 8,
+                      offset: const Offset(0, 4),
                     ),
-                  ),
+                  ],
+                ),
 
-                  const CircleAvatar(
-                    radius: 30,
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
 
-                    backgroundImage: NetworkImage(
-                      "https://i.pravatar.cc/150",
-                    ),
-                  ),
-                ],
-              ),
-            ),
+                        children: [
+                          Text(
+                            isLoading
+                                ? "Halo..."
+                                : "Halo ${userData?['username'] ?? 'User'}!",
 
-            // ===== DAFTAR PAKET =====
+                            style: const TextStyle(
+                              fontSize: 28,
+                              fontWeight: FontWeight.w700,
+                            ),
+                          ),
 
-            Container(
-              margin:
-                  const EdgeInsets.symmetric(horizontal: 16),
+                          const SizedBox(height: 10),
 
-              padding: const EdgeInsets.all(16),
+                          const Text(
+                            "Selamat datang di aplikasi cekrequ.\nAbadikan setiap momen spesialmu bersama kami.",
 
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(20),
-              ),
-
-              child: Column(
-                children: [
-
-                  Row(
-                    mainAxisAlignment:
-                        MainAxisAlignment.spaceBetween,
-
-                    children: [
-
-                      const Text(
-                        "Daftar Paket",
-
-                        style: TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
-                        ),
+                            style: TextStyle(
+                              color: Colors.grey,
+                              fontSize: 13,
+                              height: 1.5,
+                            ),
+                          ),
+                        ],
                       ),
+                    ),
+                    const CircleAvatar(
+                      radius: 35,
+                      backgroundImage: NetworkImage(
+                        "https://i.pravatar.cc/150",
+                      ),
+                    ),
+                  ],
+                ),
+              ),
 
-                      ElevatedButton(
+              const SizedBox(height: 18),
+
+              // ===== DAFTAR PAKET =====
+              Container(
+                padding: const EdgeInsets.all(18),
+
+                decoration: BoxDecoration(
+                  color: const Color(0xFFF7F7F7),
+
+                  borderRadius: BorderRadius.circular(24),
+
+                  border: Border.all(color: Colors.grey.shade300),
+                ),
+
+                child: Column(
+                  children: [
+                    const Text(
+                      "Daftar Paket",
+
+                      style: TextStyle(
+                        fontSize: 24,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+
+                    const SizedBox(height: 16),
+
+                    SizedBox(
+                      width: double.infinity,
+                      height: 45,
+
+                      child: ElevatedButton(
                         onPressed: () {},
+
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: const Color(0xFF1EA0E9),
+
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(30),
+                          ),
+                        ),
 
                         child: const Text(
                           "+ Buat Pesanan",
+
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
                       ),
-                    ],
-                  ),
-
-                  const SizedBox(height: 10),
-
-                  const Align(
-                    alignment: Alignment.centerRight,
-
-                    child: Chip(
-                      label: Text("Terbaru"),
                     ),
-                  ),
 
-                  const SizedBox(height: 10),
+                    const SizedBox(height: 16),
 
-                  isLoading
-                      ? const Center(
-                          child:
-                              CircularProgressIndicator(),
-                        )
+                    Row(
+                      children: [
+                        const Text(
+                          "Urutkan menurut :",
 
-                      : Column(
-                          children:
-                              daftarPaket.map((paket) {
-
-                            return paketCard(paket);
-
-                          }).toList(),
+                          style: TextStyle(fontSize: 12, color: Colors.grey),
                         ),
-                ],
-              ),
-            ),
 
-            const SizedBox(height: 20),
-          ],
+                        const Spacer(),
+
+                       // ===== DAFTAR PAKET ====
+                        Container(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 20,
+                            vertical: 7,
+                          ),
+
+                          decoration: BoxDecoration(
+                            color: Colors.grey.shade200,
+
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+
+                          child: const Text("Terbaru"),
+                        ),
+                      ],
+                    ),
+
+                    const SizedBox(height: 15),
+
+                    isLoading
+                        ? const Center(child: CircularProgressIndicator())
+                        : Column(
+                            children: daftarPaket.map((paket) {
+                              return paketCard(paket);
+                            }).toList(),
+                          ),
+                  ],
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
   }
 
-  // ===== CARD PAKET =====
-
+// ===== CARD PAKET =====
   Widget paketCard(Paket paket) {
-
     return Container(
-      margin: const EdgeInsets.only(bottom: 12),
+      margin: const EdgeInsets.only(bottom: 14),
 
       padding: const EdgeInsets.all(10),
 
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(15),
-        color: Colors.grey[200],
+        color: Colors.white,
+
+        borderRadius: BorderRadius.circular(18),
+
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withValues(alpha: 0.05),
+
+            blurRadius: 6,
+            offset: const Offset(0, 3),
+          ),
+        ],
       ),
 
       child: Row(
-        crossAxisAlignment:
-            CrossAxisAlignment.start,
-
         children: [
-
           ClipRRect(
-            borderRadius: BorderRadius.circular(10),
+            borderRadius: BorderRadius.circular(14),
 
-            child: SizedBox(
-              width: 90,
-              height: 90,
+            child: Image.asset(
+              paket.gambar,
 
-              child: Image.asset(
-                paket.gambar,
+              width: 85,
+              height: 85,
+              fit: BoxFit.cover,
 
-                fit: BoxFit.cover,
+              errorBuilder: (context, error, stackTrace) {
+                return Container(
+                  width: 85,
+                  height: 85,
+                  color: Colors.grey,
 
-                errorBuilder:
-                    (context, error, stackTrace) {
-
-                  return Container(
-                    color: Colors.grey,
-
-                    child: const Icon(
-                      Icons.broken_image,
-                    ),
-                  );
-                },
-              ),
+                  child: const Icon(Icons.broken_image),
+                );
+              },
             ),
           ),
 
-          const SizedBox(width: 10),
+          const SizedBox(width: 12),
 
           Expanded(
             child: Column(
-              crossAxisAlignment:
-                  CrossAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
 
               children: [
-
                 Text(
                   paket.nama,
 
                   style: const TextStyle(
-                    fontWeight: FontWeight.bold,
+                    fontWeight: FontWeight.w600,
+
+                    fontSize: 14,
                   ),
 
-                  maxLines: 1,
+                  maxLines: 2,
                   overflow: TextOverflow.ellipsis,
+                ),
+
+                const SizedBox(height: 8),
+
+                Text(
+                  "Tempat : ${paket.tempat}",
+
+                  style: const TextStyle(color: Colors.grey, fontSize: 12),
                 ),
 
                 const SizedBox(height: 4),
 
-                Text("Tempat: ${paket.tempat}"),
-                // Text("Warna: ${paket.warna}"),
-                Text("Harga: Rp ${paket.harga}"),
+                Text(
+                  "Rp ${paket.harga}",
+
+                  style: const TextStyle(
+                    fontWeight: FontWeight.bold,
+
+                    fontSize: 13,
+                  ),
+                ),
               ],
             ),
           ),
 
-          const SizedBox(width: 10),
-
           Column(
             children: [
-              const Icon(Icons.shopping_cart),
-              const SizedBox(height: 5),
-              ElevatedButton(
-                onPressed: () {
-                  // Pindah ke halaman pembelian dengan membawa data paket saat ini
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => PembelianPage(paket: paket),
-                    ),
-                  );
-                },
-                child: const Text("Beli"),
+
+              const SizedBox(height: 8),
+
+              Container(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 14,
+                  vertical: 5,
+                ),
+
+                decoration: BoxDecoration(
+                  color: const Color(0xFF8BC34A),
+
+                  borderRadius: BorderRadius.circular(20),
+                ),
+
+                child: const Text(
+                  "Sukses",
+
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 11,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
               ),
             ],
           ),
