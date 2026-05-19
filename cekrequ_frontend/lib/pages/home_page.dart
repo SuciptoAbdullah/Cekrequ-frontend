@@ -9,6 +9,7 @@ import 'jelajahi_page.dart';
 import 'pesanan_page.dart';
 import 'profil_page.dart';
 import 'login_page.dart';
+import 'main_menu_page.dart';
 
 // ===== HOME PAGE =====
 class HomePage extends StatefulWidget {
@@ -261,7 +262,9 @@ class _HomePageState extends State<HomePage> {
                       height: 45,
 
                       child: ElevatedButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          Navigator.push(context, MaterialPageRoute(builder: (_) => const MainMenuPage()));
+                        },
 
                         style: ElevatedButton.styleFrom(
                           backgroundColor: const Color(0xFF1EA0E9),
