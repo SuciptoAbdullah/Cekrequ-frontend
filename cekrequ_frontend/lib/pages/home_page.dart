@@ -5,8 +5,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../models/paket.dart';
 import 'data_paket.dart';
 
+import 'notif_page.dart';
 import 'jelajahi_page.dart';
-import 'pesanan_page.dart';
 import 'profil_page.dart';
 import 'login_page.dart';
 
@@ -96,11 +96,10 @@ class _HomePageState extends State<HomePage> {
   }
 
   List<Widget> get pages => [
-    homeContent(),
-
-    PesananPage(token: widget.token),
-
-    const JelajahiPage(),
+  homeContent(),
+  
+  JelajahiPage(token: widget.token), // Indeks 1 (Pesan & Booking Screen)
+  const NotifPage(),
 
     ProfilPage(
       userData: userData,
@@ -116,6 +115,7 @@ class _HomePageState extends State<HomePage> {
 
       body: pages[selectedIndex],
 
+      // ===== BOTTOM NAVBAR =====
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: selectedIndex,
 
@@ -123,37 +123,48 @@ class _HomePageState extends State<HomePage> {
           setState(() {
             selectedIndex = index;
           });
+
+          // ===== HOME =====
+          if (index == 0) {
+            Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => HomePage(token: '')));
+          }
+
+          // ===== JELAJAH =====
+          if (index == 1) {}
+
+          // ===== NOTIFIKASI =====
+          if (index == 2) {}
+
+          // ===== PROFILE =====
+          if (index == 3) {}
         },
+
+        selectedItemColor: Colors.grey,
+        unselectedItemColor: Colors.grey,
 
         type: BottomNavigationBarType.fixed,
 
-        selectedItemColor: Colors.black,
-
-        unselectedItemColor: Colors.grey,
-
-        backgroundColor: Colors.white,
-        elevation: 10,
-
         items: const [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home), 
-            label: "Beranda"
-            ),
 
           BottomNavigationBarItem(
-            icon: Icon(Icons.receipt), 
-            label: "Pesanan"
-            ),
+            icon: Icon(Icons.home_outlined),
+            label: "Home",
+          ),
 
           BottomNavigationBarItem(
-            icon: Icon(Icons.image), 
-            label: "Galeri"
-            ),
+            icon: Icon(Icons.explore_outlined),
+            label: "Jelajah",
+          ),
 
           BottomNavigationBarItem(
-            icon: Icon(Icons.person), 
-            label: "Profil"
-            ),
+            icon: Icon(Icons.mail_outline),
+            label: "Notifikasi",
+          ),
+
+          BottomNavigationBarItem(
+            icon: Icon(Icons.person_outline),
+            label: "Profile",
+          ),
         ],
       ),
     );
