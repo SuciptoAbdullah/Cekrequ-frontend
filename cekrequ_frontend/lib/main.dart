@@ -2,8 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:provider/provider.dart';
 import 'auth_provider.dart';
-import 'pages/login_page.dart';
-
+import 'pages/splash_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -22,10 +21,10 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return const MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Cekrequ App',
-      home: LoginPage(),
+      home: SplashScreen(), // Mulai dari SplashScreen
     );
   }
 }

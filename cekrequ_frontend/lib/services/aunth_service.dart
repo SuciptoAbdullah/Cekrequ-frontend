@@ -17,9 +17,37 @@ class AuthProvider with ChangeNotifier {
   AuthProvider() {
     _auth.authStateChanges().listen((User? newUser) {
       _user = newUser;
+      if (newUser != null) {
+        // Simpan session saat login
+        _saveUserSession(newUser);
+      } else {
+        // Hapus session saat logout
+        _clearUserSession();
+      }
       notifyListeners();
     });
     _initGoogleSignIn();
+  }
+
+  Future<void> _saveUserSession(User user) async {
+    final prefs = await SharedPreferences.getInstance();
+    Map<String, dynamic> userData = {
+      'username': user.displayName ?? user.email?.split('@')[0] ?? 'User',
+      'email': user.email ?? '',
+      'name': user.displayName ?? '',
+      'photo_url': user.photoURL ?? '',
+      'google_id': user.uid,
+    };
+    String token = 'google_${user.uid}';
+    
+    await prefs.setString('access_token', token);
+    await prefs.setString('user_data', jsonEncode(userData));
+  }
+
+  Future<void> _clearUserSession() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.remove('access_token');
+    await prefs.remove('user_data');
   }
 
   Future<void> _initGoogleSignIn() async {
@@ -46,9 +74,9 @@ class AuthProvider with ChangeNotifier {
 
       // Kirim ke backend PHP (opsional)
       try {
-        const String baseUrl = "http://10.0.166.53";
+        const String baseUrl = "http://10.230.232.96";
         final response = await http.post(
-          Uri.parse("$baseUrl/cekrequ_backend/login.php"),
+          Uri.parse("$baseUrl/api_code/login.php"),
           body: {"id_token": idToken},
         );
         debugPrint("Status HTTP: ${response.statusCode}");
@@ -66,5 +94,6 @@ class AuthProvider with ChangeNotifier {
   Future<void> signOut() async {
     await _googleSignIn.signOut();
     await _auth.signOut();
+    await _clearUserSession();
   }
 }
