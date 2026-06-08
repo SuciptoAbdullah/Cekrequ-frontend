@@ -1,0 +1,98 @@
+{
+  "project_info": {
+    "project_number": "677629900977",
+    "project_id": "logcekrekqu",
+    "storage_bucket": "logcekrekqu.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:677629900977:android:d75f524aab37b50f3f4a90",
+        "android_client_info": {
+          "package_name": "com.example.cekrequ"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "677629900977-toav4hp4itlbu44l1dm00u4nclbisosj.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.cekrequ",
+            "certificate_hash": "f4ee8eafe1d01db2ea4837bdb70e259db3407f24"
+          }
+        },
+        {
+          "client_id": "677629900977-q21cu6d0njb31n3cp6b4vtv2pv47ija6.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAj9FawSnsvaqS5IjOBBxMYoqLfZHNktiI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "677629900977-q21cu6d0njb31n3cp6b4vtv2pv47ija6.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "677629900977-0cp0sh5phuk6l155lsn8dtil5nt6s3jn.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.cekrequFrontend"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:677629900977:android:ef7608917d75bfb33f4a90",
+        "android_client_info": {
+          "package_name": "com.example.cekrequ_frontend"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "677629900977-nh81pn62a6thvlb0lkltbsn23982rpfm.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.cekrequ_frontend",
+            "certificate_hash": "f4ee8eafe1d01db2ea4837bdb70e259db3407f24"
+          }
+        },
+        {
+          "client_id": "677629900977-q21cu6d0njb31n3cp6b4vtv2pv47ija6.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAj9FawSnsvaqS5IjOBBxMYoqLfZHNktiI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "677629900977-q21cu6d0njb31n3cp6b4vtv2pv47ija6.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "677629900977-0cp0sh5phuk6l155lsn8dtil5nt6s3jn.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.cekrequFrontend"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
