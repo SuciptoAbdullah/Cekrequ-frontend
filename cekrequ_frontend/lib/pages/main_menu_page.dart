@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'ai_page.dart';
 import 'home_page.dart';
+import 'jelajahi_page.dart';
+import 'profil_page.dart';
+import 'notif_page.dart';
 
 class MainMenuPage extends StatefulWidget {
   const MainMenuPage({super.key});
@@ -127,7 +130,16 @@ class _MainMenuPageState extends State<MainMenuPage> {
                     ),
                   ),
 
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) => const JelajahiPage(
+                          token: '',
+                        ),
+                      ),
+                    );
+                  },
 
                   child: const Text(
                     "◻ Pilih Menu",
@@ -146,56 +158,85 @@ class _MainMenuPageState extends State<MainMenuPage> {
 
       // ===== BOTTOM NAVBAR =====
       bottomNavigationBar: BottomNavigationBar(
-        currentIndex: selectedIndex,
+  currentIndex: selectedIndex,
+  type: BottomNavigationBarType.fixed,
+  selectedItemColor: Colors.grey,
+  unselectedItemColor: Colors.grey,
 
-        onTap: (index) {
-          setState(() {
-            selectedIndex = index;
-          });
+  onTap: (index) {
+    setState(() {
+      selectedIndex = index;
+    });
 
-          // ===== HOME =====
-          if (index == 0) {
-            Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => HomePage(token: '')));
-          }
+    // HOME
+    if (index == 0) {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (_) => HomePage(token: ''),
+        ),
+      );
+    }
 
-          // ===== JELAJAH =====
-          if (index == 1) {}
+    // NOTIFIKASI
+    else if (index == 1) {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (_) => const NotifPage(),
+        ),
+      );
+    }
 
-          // ===== NOTIFIKASI =====
-          if (index == 2) {}
-
-          // ===== PROFILE =====
-          if (index == 3) {}
-        },
-
-        selectedItemColor: Colors.grey,
-        unselectedItemColor: Colors.grey,
-
-        type: BottomNavigationBarType.fixed,
-
-        items: const [
-
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home_outlined),
-            label: "Home",
+    // JELAJAH
+    else if (index == 2) {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (_) => const JelajahiPage(
+            token: '',
           ),
+        ),
+      );
+    }
 
-          BottomNavigationBarItem(
-            icon: Icon(Icons.explore_outlined),
-            label: "Jelajah",
+    // PROFILE
+    else if (index == 3) {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (_) => ProfilPage(
+            userData: null,
+            onLogout: () {},
+            isLoading: false,
           ),
+        ),
+      );
+    }
+  },
 
-          BottomNavigationBarItem(
-            icon: Icon(Icons.mail_outline),
-            label: "Notifikasi",
-          ),
+  items: const [
+    BottomNavigationBarItem(
+      icon: Icon(Icons.home_outlined),
+      label: "Home",
+    ),
 
-          BottomNavigationBarItem(
-            icon: Icon(Icons.person_outline),
-            label: "Profile",
-          ),
-        ],
-      ),
+    BottomNavigationBarItem(
+      icon: Icon(Icons.mail_outline),
+      label: "Notifikasi",
+    ),
+
+    BottomNavigationBarItem(
+      icon: Icon(Icons.explore_outlined),
+      label: "Jelajah",
+    ),
+
+    BottomNavigationBarItem(
+      icon: Icon(Icons.person_outline),
+      label: "Profile",
+    ),
+  ],
+),
     );
   }
 }

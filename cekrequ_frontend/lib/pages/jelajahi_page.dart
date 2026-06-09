@@ -72,15 +72,15 @@ class _JelajahiPageState extends State<JelajahiPage> {
           paketData = kategoriPaket[kataKunci[1]];
         }
         
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (_) => GalleryPage(
-              title: title,
-              packages: paketData ?? [], // Mengirim list kosong jika data tidak ditemukan
-            ),
-          ),
-        );
+        // Navigator.push(
+        //   context,
+        //   MaterialPageRoute(
+        //     builder: (_) => GalleryPage(
+        //       title: title,
+        //       packages: paketData ?? [], // Mengirim list kosong jika data tidak ditemukan
+        //     ),
+        //   ),
+        // );
       },
       child: Container(
         margin: const EdgeInsets.symmetric(vertical: 8),

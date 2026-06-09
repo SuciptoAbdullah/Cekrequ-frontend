@@ -131,13 +131,36 @@ class _HomePageState extends State<HomePage> {
           }
 
           // ===== JELAJAH =====
-          if (index == 1) {}
+          else if (index == 1) {
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(
+        builder: (_) => const JelajahiPage(
+          token: '',
+        ),
+      ),
+    );
+  }
 
           // ===== NOTIFIKASI =====
-          if (index == 2) {}
+          else if (index == 2) {
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(
+        builder: (_) => const NotifPage(),
+      ),
+    );
+  }
 
           // ===== PROFILE =====
-          if (index == 3) {}
+          else if (index == 3) {
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(
+        builder: (_) => const ProfilPage(),
+      ),
+    );
+  }
         },
 
         selectedItemColor: Colors.grey,
@@ -152,19 +175,14 @@ class _HomePageState extends State<HomePage> {
             label: "Home",
           ),
 
-          // BottomNavigationBarItem(
-          //   icon: Icon(Icons.explore_outlined),
-          //   label: "Jelajah",
-          // ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.explore_outlined),
+            label: "Jelajah",
+          ),
 
           BottomNavigationBarItem(
             icon: Icon(Icons.mail_outline),
             label: "Notifikasi",
-          ),
-
-          BottomNavigationBarItem(
-            icon: Icon(Icons.explore_outlined),
-            label: "Jelajah",
           ),
 
           BottomNavigationBarItem(
