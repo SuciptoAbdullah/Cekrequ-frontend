@@ -152,14 +152,19 @@ class _HomePageState extends State<HomePage> {
             label: "Home",
           ),
 
-          BottomNavigationBarItem(
-            icon: Icon(Icons.explore_outlined),
-            label: "Jelajah",
-          ),
+          // BottomNavigationBarItem(
+          //   icon: Icon(Icons.explore_outlined),
+          //   label: "Jelajah",
+          // ),
 
           BottomNavigationBarItem(
             icon: Icon(Icons.mail_outline),
             label: "Notifikasi",
+          ),
+
+          BottomNavigationBarItem(
+            icon: Icon(Icons.explore_outlined),
+            label: "Jelajah",
           ),
 
           BottomNavigationBarItem(
